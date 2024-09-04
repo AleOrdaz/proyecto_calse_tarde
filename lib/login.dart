@@ -26,7 +26,7 @@ class _LoginState extends State<Login> {
               height: 800, ///Agrega un tamaño al contenedor
               ///Se puede agregar padding como atributo del contenedor
               padding: EdgeInsets.all(20.0),
-              color: Color(0xFFb9a8c), ///Valor hexadecimal del color  -------->
+              //color: Color(0xFFb9a8c), ///Valor hexadecimal del color ------->
               ///quita las esquina rectangulares por bordes redondeados          Al tener estos dos atributos
               decoration: BoxDecoration(      ///                                juntos, marcará un error por
                 borderRadius: BorderRadius.circular(40),    ///                  incompatibilidad de atributos
@@ -86,9 +86,9 @@ class _LoginState extends State<Login> {
                         filled: true,
                         fillColor: Colors.white,
                         ///Agregar un icono dentro del input
-                        prefixIcon: const Icon(Icons.person),
+                        prefixIcon: const Icon(Icons.password),
                         ///Agregar texto de ayuda dentro del input
-                        hintText: 'Arega tu usuario'
+                        hintText: 'Arega tu contraseña'
                     ),
                   ),
                   const SizedBox(height: 20.0,),
