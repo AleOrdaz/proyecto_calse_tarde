@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mi_primera_app_19/home.dart';
 
 ///Clase de creación de widgets con cambios de estado
 class Login extends StatefulWidget {
@@ -112,12 +113,35 @@ class _LoginState extends State<Login> {
 
                         if(user.text == "USER01" && pass.text == "PASS01"){
                           print('Ingreso correctamente');
+                          showSnackBar('Ingreso correctamente', 10);
+
+                          ///ARCHIVO DE RUTAS
+                          ///"/"
+                          ///"/registro" 'o "registro"
+                          ///"/home" 'o "main"
+                          ///MANDAR A LLAMAR A LA VISTA/CLASE DIRECTAMENTE
+                          Navigator.push(context, MaterialPageRoute(
+                              builder: (context) => Home()));
+
+                          ///Login
+                          ///Home
+                          ///Perfil
                         } else {
                           print('Usuario y/o Contraseña incorrectos');
+                          showSnackBar('Usuario y/o Contraseña incorrectos', 20);
                         }
                       });
                     }, ///Función interna
-                    child: const Text('INGRESAR'),
+                    child: Row(
+                      ///Alinear horizontamente
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      ///Vertical
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Icon(Icons.verified_user),
+                        const Text('INGRESAR'),
+                      ],
+                    )
                   ),
                   Container(
                     width: 20,
@@ -132,5 +156,19 @@ class _LoginState extends State<Login> {
         ],
       ),
     ); 
+  }
+
+  ///AREA PARA LAS FUNCIONES
+  void showSnackBar(String texto, int duracion){
+    SnackBar(
+      content: Text(texto),
+      duration: Duration(seconds: duracion),
+      action: SnackBarAction(
+        onPressed: () {
+          //Cualquier acción al dar clic sobre el widget
+        },
+        label: 'Cerrar',
+      ),
+    );
   }
 }

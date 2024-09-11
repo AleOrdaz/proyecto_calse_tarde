@@ -21,7 +21,7 @@ class _HomeState extends State<Home> {
               children: [
                 ///for(int i = 0; i < 5; i++)
                 /// createdCard(texto: "Hola 1")
-                InkWell(
+                /*InkWell(
                   onTap: () {
                     setState(() {
                       bandCambiaDeColor = bandCambiaDeColor ? false : true;
@@ -32,7 +32,7 @@ class _HomeState extends State<Home> {
                     height: 50,
                     width: 50,
                   ) : Container(),
-                ),
+                ),*/
 
                 Container(
                   ///MediaQuery.of(context).size.height / 2 ó * 0.5 -> 50%
