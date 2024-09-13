@@ -160,7 +160,7 @@ class _LoginState extends State<Login> {
 
   ///AREA PARA LAS FUNCIONES
   void showSnackBar(String texto, int duracion){
-    SnackBar(
+    final snack = SnackBar(
       content: Text(texto),
       duration: Duration(seconds: duracion),
       action: SnackBarAction(
@@ -170,5 +170,10 @@ class _LoginState extends State<Login> {
         label: 'Cerrar',
       ),
     );
+
+    ///Muestra el mensaje en pantalla
+    ScaffoldMessenger.of(context).showSnackBar(snack);
   }
 }
+
+

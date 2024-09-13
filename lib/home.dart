@@ -9,6 +9,17 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  late List lista;
+  
+  ///Cargar o actualizar las varibles o estados antes de visualizar o craer la vista
+  @override
+  void initState() {
+    //lista = con.lista; ///
+    lista = List.from(con.lista); ///Copia de una lista inmutable a una lista mutable o cambiante
+    // TODO: implement initState
+    super.initState();
+  }
+  
   @override
   Widget build(BuildContext context) {
     ///Obtener el tamaño de la pantalla actual
@@ -41,32 +52,82 @@ class _HomeState extends State<Home> {
                   child: ///Nos permite manejar listas de datos para construir widgtes
                   ListView.builder(
                       padding: const EdgeInsets.all(8),
-                      itemCount: con.lista.length, ///n que itera o construye sus widgets
+                      itemCount: lista.length, ///n que itera o construye sus widgets
                       itemBuilder: (BuildContext context, int index) {
                         ///Area de construcción NO PASAR
 
                         String varianle = '';
                         ///Tipo dinamico o que se adapta al valor que se asigna
                         ///datos = [1, Text1, textN1, 101]
-                        var datos = con.lista[index].toString().split('#'); ///$ -> NO USAR
+                        var datos = lista[index].toString().split('#'); ///$ -> NO USAR
 
-                        return createdCard(
+                        return datos[4] == '1' ? createdCard(
                           textoN: datos[1],
                           texto: datos[2],
                           numero: datos[3],
                           id: datos[0],
-                        );
+                          ///float.parse(string)
+                          ///int num = 0;
+                          ///String variable = num.toString();
+                        ) : createdCard2(datos[1], int.parse(datos[0]));
                       }
                     //const SizedBox(height: 35.0,),
                   ),
                 )
-
               ],
             ),
           )
         ],
       ),
     );
+  }
+
+  Container createdCard2(String texto, int id) {
+    return Container(
+                        color: con.colorPrincipal,
+                        padding: EdgeInsets.all(20.0),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              flex: 10, ///80%
+                              child:  Text(texto),),
+                            Expanded(
+                              flex: 1, ///1.2 = 10%
+                              child: Icon(Icons.edit),),
+                            Expanded(
+                                flex: 1, ///1.2 = 10%
+                                ///Le da propieddad de realizar la función de botón
+                                child: InkWell(
+                                  onTap: () {
+                                    setState(() {
+                                      lista.removeAt(id);
+                                      showSnackBar('Se elimino el elemento $id', 15);
+                                      print("fue presionado el botón de eliminar id: $id");
+                                    });
+                                  },
+                                  child: Icon(Icons.delete),
+                                )
+
+                            )
+                          ],
+                        ),
+                      );
+  }
+
+  void showSnackBar(String texto, int duracion){
+    final snack = SnackBar(
+      content: Text(texto),
+      duration: Duration(seconds: duracion),
+      action: SnackBarAction(
+        onPressed: () {
+          //Cualquier acción al dar clic sobre el widget
+        },
+        label: 'Cerrar',
+      ),
+    );
+
+    ///Muestra el mensaje en pantalla
+    ScaffoldMessenger.of(context).showSnackBar(snack);
   }
 }
 
