@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mi_primera_app_19/utils/constantes.dart' as con;
+import 'package:mi_primera_app_19/utils/singleton.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -44,6 +45,8 @@ class _HomeState extends State<Home> {
                     width: 50,
                   ) : Container(),
                 ),*/
+
+                Text(singleton.userName),
 
                 Container(
                   ///MediaQuery.of(context).size.height / 2 ó * 0.5 -> 50%
