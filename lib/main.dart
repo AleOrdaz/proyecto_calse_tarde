@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:mi_primera_app_19/ejemplo.dart';
+import 'package:mi_primera_app_19/ejemplos.dart';
 import 'package:mi_primera_app_19/home.dart';
 import 'package:mi_primera_app_19/login.dart';
+import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 void main() {
+  sqfliteFfiInit();
   runApp(const MyApp());
 }
 
