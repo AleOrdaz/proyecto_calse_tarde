@@ -41,35 +41,32 @@ class _SqliteState extends State<Sqlite> {
       _descriptionController.text = existingData['description'];
     }
 
-    showModalBottomSheet(
-        context: context,
-        elevation: 5,
-        isScrollControlled: true,
-        builder: (_) => Container(
-          padding: EdgeInsets.only(
-            top: 15,
-            left: 15,
-            right: 15,
-            bottom: MediaQuery.of(context).viewInsets.bottom + 120,
-          ),
-          child: Column(
+    //showModalBottomSheet(
+    showDialog(
+      context: context,
+      //elevation: 5,
+      //isScrollControlled: true,
+      builder: (_) => AlertDialog(
+        shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(26.0))
+        ),
+        title: Text('Agregar nuevo dato'),
+        content: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              TextField(
+              TextFormField(
                 controller: _titleController,
                 decoration: const InputDecoration(hintText: 'Title'),
               ),
               const SizedBox(
                 height: 10,
               ),
-              TextField(
+              TextFormField(
                 controller: _descriptionController,
                 decoration: const InputDecoration(hintText: 'Description'),
               ),
-              const SizedBox(
-                height: 20,
-              ),
+              const SizedBox(height: 20,),
               ElevatedButton(
                 onPressed: () async {
                   // Save new data
@@ -92,7 +89,8 @@ class _SqliteState extends State<Sqlite> {
               )
             ],
           ),
-        ));
+      ),
+    );
   }
 
 // Insert a new data to the database
@@ -121,38 +119,108 @@ class _SqliteState extends State<Sqlite> {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Sqlite CRUD'),
+        backgroundColor: const Color(0xFF32775D),
+        title: const Text(
+          'Sqlite CRUD', style: TextStyle(fontWeight: FontWeight.w700),
+        ),
       ),
-      body: _isLoading
-          ? const Center(
+      drawer: Drawer(
+        elevation: 10,
+        width: size.width * 0.65,
+        child: ListView(
+          // Important: Remove any padding from the ListView.
+          padding: EdgeInsets.zero,
+          children: [
+            const DrawerHeader(
+              decoration: BoxDecoration(
+                color: Colors.blue,
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text('MI PRIMERA APLICACIÓN'),
+                  Padding(
+                    padding: EdgeInsets.all(10),
+                    child: CircleAvatar(
+                      backgroundColor: Colors.black,
+                      radius: 40,
+                      child: Text(
+                        '1', style: TextStyle(color: Colors.white, fontSize: 28),
+                      ),
+                    ),
+                  ),
+                ],
+              )
+            ),
+            ListTile(
+              title: const Text('Home'),
+              leading: const Icon(Icons.home),
+              onTap: () {
+                // Update the state of the app.
+                // ...
+              },
+            ),
+            ListTile(
+              title: const Text('SQLite'),
+              leading: const Icon(Icons.dataset_linked),
+              onTap: () {
+                // Update the state of the app.
+                // ...
+              },
+            ),
+            ListTile(
+              title: const Text('Mapa'),
+              leading: const Icon(Icons.map),
+              onTap: () {
+                // Update the state of the app.
+                // ...
+              },
+            ),
+            SizedBox(height: size.height * 0.45,),
+            const Divider(),
+            ListTile(
+              title: const Text('Cerrar Sesión'),
+              leading: const Icon(Icons.exit_to_app),
+              onTap: () {
+                // Update the state of the app.
+                // ...
+              },
+            ),
+          ],
+        ),
+      ),
+      body: _isLoading ? const Center(
         child: CircularProgressIndicator(),
-      )
-          : myData.isEmpty?const Center(child:  Text("No Data Available!!!")):  ListView.builder(
+      ) : myData.isEmpty ? const Center(
+          child:  Text("No Data Available!!!")
+      ) : ListView.builder(
         itemCount: myData.length,
         itemBuilder: (context, index) => Card(
           color:index%2==0?Colors.green: Colors.green[200],
           margin: const EdgeInsets.all(15),
           child:ListTile(
-              title: Text(myData[index]['title']),
-              subtitle: Text(myData[index]['description']),
-              trailing: SizedBox(
-                width: 100,
-                child: Row(
-                  children: [
-                    IconButton(
-                      icon: const Icon(Icons.edit),
-                      onPressed: () => showMyForm(myData[index]['id']),
-                    ),
-                    IconButton(
-                      icon: const Icon(Icons.delete),
-                      onPressed: () =>
-                          deleteItem(myData[index]['id']),
-                    ),
-                  ],
-                ),
-              )),
+            title: Text(myData[index]['title']),
+            subtitle: Text(myData[index]['description']),
+            trailing: SizedBox(
+              width: 100,
+              child: Row(
+                children: [
+                  IconButton(
+                    icon: const Icon(Icons.edit),
+                    onPressed: () => showMyForm(myData[index]['id']),
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.delete),
+                    onPressed: () => deleteItem(myData[index]['id']),
+                  ),
+                ],
+              ),
+            ),
+          ),
         ),
       ),
       floatingActionButton: FloatingActionButton(

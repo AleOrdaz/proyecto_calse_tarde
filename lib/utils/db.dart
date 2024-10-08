@@ -7,6 +7,7 @@ class DatabaseHelper {
         id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
         title TEXT,
         description TEXT,
+        description TEXT,
         createdAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
       )
       """);
@@ -17,7 +18,7 @@ class DatabaseHelper {
 // created_at: the time that the item was created. It will be automatically handled by SQLite
   static Future<sql.Database> db() async {
     return sql.openDatabase(
-      'nabindhakal.db',
+      'examen.db',
       version: 1,
       onCreate: (sql.Database database, int version) async {
         await createTables(database);

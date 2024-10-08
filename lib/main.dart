@@ -3,10 +3,11 @@ import 'package:mi_primera_app_19/ejemplo.dart';
 import 'package:mi_primera_app_19/ejemplos.dart';
 import 'package:mi_primera_app_19/home.dart';
 import 'package:mi_primera_app_19/login.dart';
+import 'package:mi_primera_app_19/sqlite.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 void main() {
-  sqfliteFfiInit();
+  sqfliteFfiInit(); ///Inicializar la BD
   runApp(const MyApp());
 }
 
@@ -24,7 +25,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: Home(),
+      home: Sqlite(),
     );
   }
 }
