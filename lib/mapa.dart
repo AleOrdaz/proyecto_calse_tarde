@@ -80,7 +80,7 @@ class _MapaState extends State<Mapa> {
       //LLamado a la funcion que solicita a la api las coordenadas
       data = await networkHelper.getData();
       print('data: $data'); //json completo
-      //
+      //CAPTUREN O IMPRIMAN LAS COORDENADAS
 
     } catch(e) {
       print('Hubo un error al extraer las coordenadas');
