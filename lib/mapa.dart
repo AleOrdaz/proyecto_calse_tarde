@@ -41,6 +41,23 @@ class _MapaState extends State<Mapa> {
             myLocationEnabled: true,
             myLocationButtonEnabled: true,
             initialCameraPosition: CameraPosition(target: _center, zoom: 11.0,),
+            markers:{
+              const Marker(
+                markerId: MarkerId("source"),
+                position: sourceLocation,
+                infoWindow: InfoWindow(title: "Información inicio"),
+              ),
+              Marker(
+                  markerId: MarkerId("destination"),
+                  position: destination,
+                  infoWindow: const InfoWindow(title: "Información destino"),
+                  onTap: () {
+                    setState(() {
+                      //showAlertDialog(context);
+                    });
+                  }
+              ),
+            },
           ),
         ],
       ),
