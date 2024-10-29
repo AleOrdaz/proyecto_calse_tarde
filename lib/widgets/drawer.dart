@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mi_primera_app_19/api.dart';
+import 'package:mi_primera_app_19/mapa.dart';
 import 'package:mi_primera_app_19/sqlite.dart';
 
 class appDrawer extends StatelessWidget {
@@ -68,8 +69,8 @@ class appDrawer extends StatelessWidget {
             title: const Text('Mapa'),
             leading: const Icon(Icons.map),
             onTap: () {
-              // Update the state of the app.
-              // ...
+              Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => const Mapa()));
             },
           ),
           SizedBox(height: size.height * 0.45,),

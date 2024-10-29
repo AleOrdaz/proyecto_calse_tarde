@@ -1,13 +1,29 @@
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:mi_primera_app_19/ejemplo.dart';
 import 'package:mi_primera_app_19/ejemplos.dart';
 import 'package:mi_primera_app_19/home.dart';
 import 'package:mi_primera_app_19/login.dart';
 import 'package:mi_primera_app_19/sqlite.dart';
+import 'package:mi_primera_app_19/utils/singleton.dart';
+import 'package:mi_primera_app_19/utils/util.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
-void main() {
+Future<void> main() async {
   sqfliteFfiInit(); ///Inicializar la BD
+  ///Obtner las coordenadas del dispositivo
+  try {
+    //Solicitar el permiso de la geolocalización
+    //Obtiene las coordenadas
+    Position position = await Utils.determinePosition();
+    singleton.latitud = position.latitude;
+    singleton.longitud = position.longitude;
+  }catch(e) {
+    //Obtiene alguna falla al obtener coordenadas
+    //asignamos valores por default
+    singleton.latitud = 22.123456;
+    singleton.longitud = -101.123456;
+  }
   runApp(const MyApp());
 }
 

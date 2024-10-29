@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:mi_primera_app_19/home.dart';
 import 'package:mi_primera_app_19/utils/singleton.dart';
+import 'package:mi_primera_app_19/widgets/loader.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 ///Clase de creación de widgets con cambios de estado
 class Login extends StatefulWidget {
@@ -16,8 +18,28 @@ class _LoginState extends State<Login> {
   final pass = TextEditingController();
   ///Singleton singleton = Singleton();
 
+  late SharedPreferences sharedPreferences;
+
+  @override
+  void initState() {
+    ///la función initState no puede realizar acciones asincronas o futuras
+    initShared();
+    // TODO: implement initState
+    super.initState();
+  }
+
+  Future<void> initShared() async {
+    sharedPreferences = await  SharedPreferences.getInstance();
+    ///Función para verificar si tiene la sesión activa
+    tieneLaSesionAbierta();
+  }
+
   @override
   Widget build(BuildContext context) {
+
+    Widget loadingIndicator = singleton.loader ?
+    const Loader() : Container();
+
     /// Widget principal para crear una vista completa
     return Scaffold(
       ///Construye todos los widgets hijos/internos uno sobre otro
@@ -125,6 +147,17 @@ class _LoginState extends State<Login> {
                           showSnackBar('Ingreso correctamente', 10);
 
                           singleton.userName = 'Alejandro Ordaz';
+
+                          ///Guardar información en cache
+                          sharedPreferences.setBool('islogin', true);
+                          sharedPreferences.setString('user', user.text);
+                          sharedPreferences.setString('pass', pass.text);
+
+                          sharedPreferences.setBool('islogin', false);
+                          sharedPreferences.setString('user', '');
+                          sharedPreferences.setString('pass', '');
+                          //limpiar singleton
+
                           ///ARCHIVO DE RUTAS
                           ///"/"
                           ///"/registro" 'o "registro"
@@ -162,7 +195,8 @@ class _LoginState extends State<Login> {
                 ],
               ),
             )
-          )
+          ),
+          Align(alignment: FractionalOffset.center, child: loadingIndicator)
         ],
       ),
     ); 
@@ -184,6 +218,23 @@ class _LoginState extends State<Login> {
     ///Muestra el mensaje en pantalla
     ScaffoldMessenger.of(context).showSnackBar(snack);
   }
+
+  void tieneLaSesionAbierta() {
+    ///Existe un valor de islogin se asigna a la variable y si no se
+    ///asigna un valor d epor default
+    singleton.login = (sharedPreferences.getBool('islogin') ?? false);
+
+    if(singleton.login) {
+      print('Si tiene la sesión abierta');
+      singleton.user = (sharedPreferences.getString('user') ?? '');
+      singleton.pass = (sharedPreferences.getString('pass') ?? '');
+      setState(() {
+        singleton.loader = true;
+        Navigator.push(context, MaterialPageRoute(
+            builder: (context) => Home()));
+      });
+    } else {
+      print('No tiene la sesión abierta');
+    }
+  }
 }
-
-

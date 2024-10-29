@@ -14,6 +14,15 @@ class Singleton {
   ///Siempre inicializar las varciables
   ///a excepción de asignar el valor null
   String userName = '';
+  double latitud = 0.0;
+  double longitud = 0.0;
+  String direccion = '';
+
+  ///Variables para el login
+  bool loader = false;
+  bool login = false;
+  String user = '';
+  String pass = '';
 }
 late Singleton singleton;
 

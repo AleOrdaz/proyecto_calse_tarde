@@ -1,6 +1,12 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:mi_primera_app_19/utils/get_api.dart';
+import 'package:mi_primera_app_19/utils/singleton.dart';
+import 'package:mi_primera_app_19/utils/util.dart';
 
 class Mapa extends StatefulWidget {
   const Mapa({super.key});
@@ -11,8 +17,9 @@ class Mapa extends StatefulWidget {
 
 class _MapaState extends State<Mapa> {
   late GoogleMapController mapController;
+  final Completer<GoogleMapController> _controller = Completer();
 
-  late final LatLng _center = const LatLng(22.144596, -101.009064);
+  late LatLng _center = const LatLng(22.144596, -101.009064);
 
   //Origin
   static const LatLng sourceLocation = LatLng(22.144596, -101.009064);
@@ -22,13 +29,18 @@ class _MapaState extends State<Mapa> {
   @override
   void initState() {
     getJsonData(); // Función que realiza el llamado a la api
-
+    cambiarLatLng(); //Función para actualizar las coordenadas
     // TODO: implement initState
     super.initState();
   }
 
   void _onMapCreated(GoogleMapController controller) {
     mapController = controller;
+  }
+
+  void cambiarLatLng() {
+    _center = LatLng(singleton.latitud, singleton.longitud);
+    getAddress();
   }
 
   @override
@@ -40,6 +52,14 @@ class _MapaState extends State<Mapa> {
             onMapCreated: _onMapCreated,
             myLocationEnabled: true,
             myLocationButtonEnabled: true,
+            //Función para actualizar la posición del dispositivo en movimiento
+            onCameraMove: (CameraPosition position){
+              setState(() {
+                singleton.latitud = position.target.latitude;
+                singleton.longitud = position.target.longitude;
+                getAddress();
+              });
+            },
             initialCameraPosition: CameraPosition(target: _center, zoom: 11.0,),
             markers:{
               const Marker(
@@ -59,9 +79,61 @@ class _MapaState extends State<Mapa> {
               ),
             },
           ),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Text(
+              singleton.direccion,
+              style: const TextStyle(fontSize: 18),
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.only(top: 200, left: 50),
+            child: CircleAvatar(
+              radius: 25,
+              backgroundColor: Colors.blue,
+              child: IconButton(
+                icon: Icon(Icons.location_searching),
+                iconSize: 28,
+                onPressed: () async {
+                  final GoogleMapController controller =
+                  await _controller.future;
+                  Position p = await Utils.determinePosition();
+                  setState(() {
+                    singleton.latitud = p.latitude;
+                    singleton.longitud = p.longitude;
+                  });
+                  //Mover la camara para posicionarse en nuestra posición
+                  controller.animateCamera(CameraUpdate.newCameraPosition(
+                      CameraPosition(
+                        bearing: 0,
+                        target:  LatLng(singleton.latitud,singleton.longitud),
+                        zoom: 15.0
+                      )));
+
+                },
+              ),
+            ),
+          )
         ],
       ),
     );
+  }
+
+  Future<void> getAddress() async {
+    try{
+      ///Obtiene toda la información que existe gratis
+      ///de las coordenadas
+      List<Placemark> p = await placemarkFromCoordinates(
+          singleton.latitud, singleton.longitud);
+      Placemark place = p[0];
+      setState(() {
+        print(place);
+        singleton.direccion = '${place.street}, ${place.locality}';
+      });
+    } catch(e) {
+      singleton.direccion = 'No se existe dirección';
+      print(e);
+    }
   }
 
   Future<void> getJsonData() async {
