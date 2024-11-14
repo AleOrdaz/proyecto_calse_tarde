@@ -43,6 +43,7 @@ dependencies:
   geolocator: ^9.0.1
   geocoding:
   shared_preferences: ^2.0.13
+  flutter_credit_card:
 
 dev_dependencies:
   flutter_test:

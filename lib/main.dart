@@ -9,8 +9,11 @@ import 'package:mi_primera_app_19/utils/singleton.dart';
 import 'package:mi_primera_app_19/utils/util.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
+import 'card.dart';
+
 Future<void> main() async {
   sqfliteFfiInit(); ///Inicializar la BD
+  Singleton singleton = Singleton();
   ///Obtner las coordenadas del dispositivo
   try {
     //Solicitar el permiso de la geolocalización
@@ -41,7 +44,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: Sqlite(),
+      home: CreditCard(),
     );
   }
 }
